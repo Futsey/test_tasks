@@ -2,7 +2,9 @@ package fly_path_percentile.reader.service.date_convertor;
 
 import java.time.LocalDateTime;
 
-public interface DateConvertor<T> {
+public interface DateConverter {
 
-    T convertToLocalDateTime(String date, String time);
+    LocalDateTime parseToLocalDateTime(String date, String time);
+
+    Long convertToLong(LocalDateTime date, String timeZone);
 }

@@ -1,28 +1,21 @@
 package fly_path_percentile.reader.util;
 
-import java.util.Arrays;
-import java.util.Collections;
+import fly_path_percentile.reader.model.Ticket;
+import fly_path_percentile.reader.service.date_convertor.DateConverter;
+import fly_path_percentile.reader.service.date_convertor.StringToLocalDateTimeConverter;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public final class Percentil {
-
-    public static void main(String[] args) {
-        List<Long> latencies = Arrays.asList(3L,6L,7L,8L,8L,9L,10L,13L,15L,16L,20L);
-        Collections.sort(latencies);
-
-        System.out.println(percentile(latencies, 25));
-        System.out.println(percentile(latencies, 50));
-        System.out.println(percentile(latencies, 75));
-        System.out.println(percentile(latencies, 90));
-    }
-
-    public long flightTime(Long departed, Long arrived) {
-        return arrived - departed;
-    }
+public final class PercentilUtil {
 
     public static long percentile(List<Long> latencies, double percentile) {
         int index = (int) Math.ceil(percentile / 100.0 * latencies.size());
         return latencies.get(index - 1);
+    }
+
+    public long flightTime(Long departed, Long arrived) {
+        return arrived - departed;
     }
 
     public static String showInHours(long time) {
@@ -35,5 +28,23 @@ public final class Percentil {
                 minutes,
                 seconds
         );
+    }
+
+    public static List<Long> getLatencyList(List<Ticket> ticketList) {
+        String vladivostok = "Asia/Vladivostok";
+        String telAviv = "Asia/Tel_Aviv";
+        Long cityDeparted;
+        Long cityArrived;
+        DateConverter dateConverter = new StringToLocalDateTimeConverter();
+        List<Long> latencies = new ArrayList<>();
+        PercentilUtil percentilUtil = new PercentilUtil();
+        for (Ticket latency : ticketList) {
+            cityDeparted = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
+                    latency.getDepartureDate(), latency.getDepartureTime()), vladivostok);
+            cityArrived = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
+                    latency.getArrivalDate(), latency.getArrivalTime()), telAviv);
+            latencies.add(percentilUtil.flightTime(cityDeparted, cityArrived));
+        }
+        return latencies;
     }
 }

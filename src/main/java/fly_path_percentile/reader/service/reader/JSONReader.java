@@ -1,4 +1,4 @@
-package fly_path_percentile.reader.service;
+package fly_path_percentile.reader.service.reader;
 
 import com.google.gson.*;
 import fly_path_percentile.reader.model.Ticket;
