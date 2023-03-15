@@ -1,4 +1,4 @@
-package fly_path_percentile.reader.model;
+package fly_path_percentile.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

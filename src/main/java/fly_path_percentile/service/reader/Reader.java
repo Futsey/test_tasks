@@ -1,4 +1,4 @@
-package fly_path_percentile.reader.service.reader;
+package fly_path_percentile.service.reader;
 
 import java.util.List;
 

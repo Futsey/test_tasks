@@ -1,15 +1,17 @@
-package fly_path_percentile.reader.util;
+package fly_path_percentile.util;
 
-import fly_path_percentile.reader.model.Ticket;
-import fly_path_percentile.reader.service.date_convertor.DateConverter;
-import fly_path_percentile.reader.service.date_convertor.StringToLocalDateTimeConverter;
+import fly_path_percentile.model.Ticket;
+import fly_path_percentile.service.date_convertor.DateConverter;
+import fly_path_percentile.service.date_convertor.StringToLocalDateTimeConverter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class PercentilUtil {
 
     public static long percentile(List<Long> latencies, double percentile) {
+        Collections.sort(latencies);
         int index = (int) Math.ceil(percentile / 100.0 * latencies.size());
         return latencies.get(index - 1);
     }

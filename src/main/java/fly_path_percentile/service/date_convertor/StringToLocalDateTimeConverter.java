@@ -1,10 +1,10 @@
-package fly_path_percentile.reader.service.date_convertor;
+package fly_path_percentile.service.date_convertor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static fly_path_percentile.reader.util.DateUtil.*;
+import static fly_path_percentile.util.DateUtil.*;
 
 public class StringToLocalDateTimeConverter implements DateConverter {
 

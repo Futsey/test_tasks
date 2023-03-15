@@ -1,4 +1,4 @@
-package fly_path_percentile.reader.service.date_convertor;
+package fly_path_percentile.service.date_convertor;
 
 import java.time.LocalDateTime;
 
