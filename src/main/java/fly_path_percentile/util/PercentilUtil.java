@@ -10,10 +10,18 @@ import java.util.List;
 
 public final class PercentilUtil {
 
+    private static DateConverter dateConverter = new StringToLocalDateTimeConverter();
+    private static PercentilUtil percentilUtil = new PercentilUtil();
+    private static List<Long> latencies = new ArrayList<>();;
+
     public static long percentile(List<Long> latencies, double percentile) {
         Collections.sort(latencies);
         int index = (int) Math.ceil(percentile / 100.0 * latencies.size());
         return latencies.get(index - 1);
+    }
+
+    public static double avg(List<Long> latencies) {
+        return latencies.stream().mapToLong(a -> a).average().orElse(0);
     }
 
     public long flightTime(Long departed, Long arrived) {
@@ -35,15 +43,10 @@ public final class PercentilUtil {
     public static List<Long> getLatencyList(List<Ticket> ticketList) {
         String vladivostok = "Asia/Vladivostok";
         String telAviv = "Asia/Tel_Aviv";
-        Long cityDeparted;
-        Long cityArrived;
-        DateConverter dateConverter = new StringToLocalDateTimeConverter();
-        List<Long> latencies = new ArrayList<>();
-        PercentilUtil percentilUtil = new PercentilUtil();
         for (Ticket latency : ticketList) {
-            cityDeparted = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
+            Long cityDeparted = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
                     latency.getDepartureDate(), latency.getDepartureTime()), vladivostok);
-            cityArrived = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
+            Long cityArrived = dateConverter.convertToLong(dateConverter.parseToLocalDateTime(
                     latency.getArrivalDate(), latency.getArrivalTime()), telAviv);
             latencies.add(percentilUtil.flightTime(cityDeparted, cityArrived));
         }

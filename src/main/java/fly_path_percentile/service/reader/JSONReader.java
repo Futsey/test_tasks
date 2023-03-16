@@ -13,19 +13,14 @@ import java.util.List;
 
 public class JSONReader implements Reader<Ticket> {
 
-    private Gson gson = new Gson();
     private static final Logger LOG = LoggerFactory.getLogger(JSONReader.class.getName());
 
     @Override
     public List<Ticket> read(String path) {
         List<Ticket> ticketList = new ArrayList<>();
-        File inputJson = new File(path);
-        if (inputJson.exists()) {
+        if (new File(path).exists()) {
             try {
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
-                JsonElement jsonElement = JsonParser.parseReader(new FileReader(inputJson));
+                JsonElement jsonElement = JsonParser.parseReader(new FileReader(path));
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 JsonArray jsonArray = jsonObject.get("tickets").getAsJsonArray();
                 for (JsonElement ticket : jsonArray) {
@@ -48,7 +43,7 @@ public class JSONReader implements Reader<Ticket> {
                 LOG.error("Exception: JSONReader{ read() }", e);
             }
         } else {
-            System.out.println("File is not exist");
+            LOG.warn("File is not exist");
         }
         return ticketList;
     }
